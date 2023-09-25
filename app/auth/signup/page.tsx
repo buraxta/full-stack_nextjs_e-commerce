@@ -28,8 +28,17 @@ export default function SignUp() {
   } = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (response.ok) {
+        console.log(await response.json());
+      } else {
+        console.log("User creation failed");
+      }
     },
   });
 
