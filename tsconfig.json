@@ -23,6 +23,8 @@
       "@app/*": ["./app/*"],
       "@hooks/*":["./app/hooks/*"],
       "@components/*":["./app/components/*"],
+      "@lib/*":["./app/lib/*"],
+      "@models/*":["./app/models/*"],
 
     }
   },

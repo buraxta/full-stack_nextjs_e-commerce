@@ -28,13 +28,15 @@ export default function SignUp() {
   } = useFormik({
     initialValues: { name: "", email: "", password: "" },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, action) => {
+      action.setSubmitting(true);
       const response = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
       if (response.ok) {
+        action.setSubmitting(false);
         console.log(await response.json());
       } else {
         console.log("User creation failed");
@@ -73,7 +75,7 @@ export default function SignUp() {
         value={password}
         onBlur={handleBlur}
       />
-      <Button type="submit" className="w-full">
+      <Button disabled={isSubmitting} type="submit" className="w-full">
         Sign up
       </Button>
       <div className="">
