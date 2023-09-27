@@ -1,5 +1,6 @@
-import React from "react";
-import { redirect, notFound } from "next/navigation";
+"use client";
+import React, { useEffect } from "react";
+import { useRouter, notFound } from "next/navigation";
 
 interface Props {
   searchParams: { token: string; userId: string };
@@ -7,6 +8,28 @@ interface Props {
 
 export default function page(props: Props) {
   const { token, userId } = props.searchParams;
+  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/users/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, userId }),
+    }).then(async (res) => {
+      const apiRes = await res.json();
+
+      const { error, message } = apiRes as { error: string; message: string };
+
+      if (res.ok) {
+        router.replace("/");
+      }
+
+      if (!res.ok && error) {
+        console.log(error);
+      }
+    });
+  }, [token, userId]);
+
   if (!token || !userId) {
     return notFound();
   }
